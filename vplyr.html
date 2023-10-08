@@ -1,160 +1,172 @@
-
-<!DOCTYPE html>
-<html lang="en" >
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>STREAMTEST Netflix Player</title>
-  <link rel="stylesheet" href="./style.css">
-
-</head>
-<body>
-<!-- partial:index.partial.html -->
-<!--  Fullscreen Video CSS -->
+<title>Leak Studio TV</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="description" content="Leak Studio TV">
+<meta name="keywords" content="Watch live sports streaming online, including football, basketball, baseball, 
+hockey, and more. Stream your favorite sports teams and events in HD, with no cable subscription required.">
+<meta name="author" content="Mostafa Nayem">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" type="image/x-icon" href="https://i.ibb.co/37fVLxB/f4027915ec9335046755d489a14472f2.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.6.2/dist/plyr.css" />
+<script src="https://cdn.jsdelivr.net/npm/plyr@3.6.12/dist/plyr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.1.4/dist/hls.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 <style>
-  #player {
-    position: absolute;
-    width: 100% !important;
-    height: 100% !important;
-  }
-</style>
-
-<!-- Player -->
-<div id="player"></div>
-<script src='https://content.jwplatform.com/libraries/KB5zFt7A.js'></script>
-<script type="text/javascript">
-  const playerInstance = jwplayer("player").setup({
-  Volume: "100",
-  mute: false,
-  controls: true,
-  sharing: true,
-  displaytitle: true,
-  displaydescription: true,
-  abouttext: "Buy Me a Coffee",
-  aboutlink: "https://jiolive.tv",
-
-  skin: {
-    name: "netflix"
-  },
-
-  logo: {
-    file:
-      "https://gcdnb.pbrd.co/images/1n0LyiWbrxFY.png",
-    link: "https://jiolive.tv"
-  },
-
-  captions: {
-    color: "#FFF",
-    fontSize: 14,
-    backgroundOpacity: 0,
-    edgeStyle: "raised"
-  },
-
-  playlist: [
-    {
-      title: "",
-      description: "",
-      image: "",
-      sources: [
-        {
-          file:
-            "https://sportsleading.online/live/stream_e1.m3u8",
-          label: "1080p",
-          default: true
+        html {
+            font-family: Poppins;
+            background: #000;
+            margin: 0;
+            padding: 0
         }
-      ],
-      
-      tracks: [
-        {
-          file: "https://cdn.jwplayer.com/strips/iYfADWO1-120.vtt",
-          kind: "thumbnails"
+
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
         }
-      ]
-    }
-  ],
 
+        .loading-text {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            text-align: center;
+            width: 100%;
+            height: 100px;
+            line-height: 100px;
+        }
 
-});
+        .loading-text span {
+            display: inline-block;
+            margin: 0 5px;
+            color: #00b3ff;
+            font-family: 'Quattrocento Sans', sans-serif;
+        }
 
-playerInstance.on("ready", function () {
-  const buttonId = "download-video-button";
-  const iconPath =
-    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0Ij48cGF0aCBmaWxsPSJub25lIiBkPSJNMCAwaDI0djI0SDB6Ii8+PHBhdGggZD0iTTMgMTloMTh2Mkgzdi0yem0xMC01LjgyOEwxOS4wNzEgNy4xbDEuNDE0IDEuNDE0TDEyIDE3IDMuNTE1IDguNTE1IDQuOTI5IDcuMSAxMSAxMy4xN1YyaDJ2MTEuMTcyeiIgZmlsbD0icmdiYSgyNDcsMjQ3LDI0NywxKSIvPjwvc3ZnPg==";
-  const tooltipText = "Download Video";
+        .loading-text span:nth-child(1) {
+            filter: blur(0px);
+            animation: blur-text 1.5s 0s infinite linear alternate;
+        }
 
-  // Call the player's `addButton` API method to add the custom button
-  playerInstance.addButton(iconPath, tooltipText, buttonClickAction, buttonId);
+        .loading-text span:nth-child(2) {
+            filter: blur(0px);
+            animation: blur-text 1.5s 0.2s infinite linear alternate;
+        }
 
-  // This function is executed when the button is clicked
-  function buttonClickAction() {
-    const playlistItem = playerInstance.getPlaylistItem();
-    const anchor = document.createElement("a");
-    const fileUrl = playlistItem.file;
-    anchor.setAttribute("href", fileUrl);
-    const downloadName = playlistItem.file.split("/").pop();
-    anchor.setAttribute("download", downloadName);
-    anchor.style.display = "none";
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
-  }
+        .loading-text span:nth-child(3) {
+            filter: blur(0px);
+            animation: blur-text 1.5s 0.4s infinite linear alternate;
+        }
 
-  // Move the timeslider in-line with other controls
-  const playerContainer = playerInstance.getContainer();
-  const buttonContainer = playerContainer.querySelector(".jw-button-container");
-  const spacer = buttonContainer.querySelector(".jw-spacer");
-  const timeSlider = playerContainer.querySelector(".jw-slider-time");
-  buttonContainer.replaceChild(timeSlider, spacer);
+        .loading-text span:nth-child(4) {
+            filter: blur(0px);
+            animation: blur-text 1.5s 0.6s infinite linear alternate;
+        }
 
-  // Detect adblock
-  playerInstance.on("adBlock", () => {
-    const modal = document.querySelector("div.modal");
-    modal.style.display = "flex";
+        .loading-text span:nth-child(5) {
+            filter: blur(0px);
+            animation: blur-text 1.5s 0.8s infinite linear alternate;
+        }
 
-    document
-      .getElementById("close")
-      .addEventListener("click", () => location.reload());
-  });
+        .loading-text span:nth-child(6) {
+            filter: blur(0px);
+            animation: blur-text 1.5s 1s infinite linear alternate;
+        }
 
-  // Forward 10 seconds
-  const rewindContainer = playerContainer.querySelector(
-    ".jw-display-icon-rewind"
-  );
-  const forwardContainer = rewindContainer.cloneNode(true);
-  const forwardDisplayButton = forwardContainer.querySelector(
-    ".jw-icon-rewind"
-  );
-  forwardDisplayButton.style.transform = "scaleX(-1)";
-  forwardDisplayButton.ariaLabel = "Forward 10 Seconds";
-  const nextContainer = playerContainer.querySelector(".jw-display-icon-next");
-  nextContainer.parentNode.insertBefore(forwardContainer, nextContainer);
+        .loading-text span:nth-child(7) {
+            filter: blur(0px);
+            animation: blur-text 1.5s 1.2s infinite linear alternate;
+        }
 
-  // control bar icon
-  playerContainer.querySelector(".jw-display-icon-next").style.display = "none"; // hide next button
-  const rewindControlBarButton = buttonContainer.querySelector(
-    ".jw-icon-rewind"
-  );
-  const forwardControlBarButton = rewindControlBarButton.cloneNode(true);
-  forwardControlBarButton.style.transform = "scaleX(-1)";
-  forwardControlBarButton.ariaLabel = "Forward 10 Seconds";
-  rewindControlBarButton.parentNode.insertBefore(
-    forwardControlBarButton,
-    rewindControlBarButton.nextElementSibling
-  );
+        .loading-text span:nth-child(8) {
+            filter: blur(0px);
+            animation: blur-text 1.5s 1.4s infinite linear alternate;
+        }
+        
+        .loading-text span:nth-child(9) {
+            filter: blur(0px);
+            animation: blur-text 1.5s 1.6s infinite linear alternate;
+        }
+        @keyframes blur-text {
+            0% {
+                filter: blur(0px);
+            }
 
-  // add onclick handlers
-  [forwardDisplayButton, forwardControlBarButton].forEach((button) => {
-    button.onclick = () => {
-      playerInstance.seek(playerInstance.getPosition() + 10);
-    };
-  });
-});
-</script>
+            100% {
+                filter: blur(4px);
+            }
+        }
 
-
-  </div>
+        .plyr__video-wrapper::after {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 10;
+            content: '';
+            height: 35px;
+            width: 35px;
+            background: no-repeat;
+            background-size: 40px, auto, auto;
+        }
+    </style>
+<body>
+<div id="loading" class="loading">
+<div class="loading-text">
+<span class="loading-text-words">N</span>
+<span class="loading-text-words">A</span>
+<span class="loading-text-words">Y</span>
+<span class="loading-text-words">E</span>
+<span class="loading-text-words">M</span>
+<span class="loading-text-words"></span>
+<span class="loading-text-words">T</span>
+<span class="loading-text-words">V</span>
 </div>
-<!-- partial -->
+</div>
+<video autoplay controls crossorigin playsinline>
+<source type="application/vnd.apple.mpegurl" src="https://sportsleading.online/live/stream_e1.m3u8"> </video>
+ </video>
+</body>
+<script>
+    setTimeout(videovisible, 3000)
 
-
+    function videovisible() {
+        document.getElementById('loading').style.display = 'none'
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+        const e = document.querySelector("video"),
+            n = e.getElementsByTagName("source")[0].src,
+            o = {};
+        if (Hls.isSupported()) {
+            var config = {
+                maxMaxBufferLength: 100,
+            };
+            const t = new Hls(config);
+            t.loadSource(n), t.on(Hls.Events.MANIFEST_PARSED, function(n, l) {
+                const s = t.levels.map(e => e.height);
+                o.quality = {
+                    default: s[0],
+                    options: s,
+                    forced: !0,
+                    onChange: e => (function(e) {
+                        window.hls.levels.forEach((n, o) => {
+                            n.height === e && (window.hls.currentLevel = o)
+                        })
+                    })(e)
+                };
+                new Plyr(e, o)
+            }), t.attachMedia(e), window.hls = t
+        } else {
+            new Plyr(e, o)
+        }
+    });
+</script>
 </body>
 </html>
